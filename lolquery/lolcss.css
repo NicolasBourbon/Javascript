@@ -1,0 +1,14 @@
+.bug1{
+    /* width: auto; */
+    background-color: blue;
+    position: absolute;
+    font-size: 30px;
+    border: 1px solid red;
+    color: yellow;
+
+}
+/* .container2{
+    width: auto;
+    background-color: blue;
+    position: absolute;
+} */

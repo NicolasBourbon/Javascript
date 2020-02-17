@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Titre de la page</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js"></script>
+        <style>
+
+            *{
+                box-sizing: border-box;
+            }
+
+            #score-compteur{
+                margin: auto;
+                width: 600px;
+                height: 10px;
+                margin-top: 70px;
+                line-height: 15px;
+                /* border: solid 1px red; */
+            }
+
+            #tab{
+                margin: auto;
+                margin-top: 20px;
+                width: 600px;
+                height: 600px;
+                display: flex;
+                flex-wrap: wrap;
+            }
+            
+            a{
+                width: 200px;
+                height: 200px;
+                border: 2px solid black;
+                font-size: 8em;
+                text-align: center;
+                text-decoration: none;
+                color: black;
+                line-height: 200px;
+                /* border: solid 1px red; */
+                
+            }  
+
+            #buttonReplay{
+                margin: auto;
+                height : 35px;
+                /* border: solid 1px red; */
+                
+            }
+
+            #victoireDe{
+                background-color: light;
+                /* border: solid 1px red; */
+                
+            }
+
+            #resultX{
+                /* border: solid 1px red; */
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>A <span>X</span> DE JOUER !</h1>
+        <div id="tab">
+            <a href="" id="1-1"></a>
+            <a href="" id="1-2"></a>
+            <a href="" id="1-3"></a>
+            <a href="" id="2-1"></a>
+            <a href="" id="2-2"></a>
+            <a href="" id="2-3"></a>
+            <a href="" id="3-1"></a>
+            <a href="" id="3-2"></a>
+            <a href="" id="3-3"></a>
+            <h2 id="victoireDe">JOUEUR <span ></span> GAGNE LA PARTIE !</h2>
+            <input type="button" id="buttonReplay" value="REJOUER" onclick="rejouer()" />
+        </div>
+        <div id="score-compteur">
+           <h2>TOUR N° <span id="numTour">1</span></h2><br>
+           <h2>PARTIES GAGNEES PAR LE JOUEUR X : <span id="resultX"></span></h2><br>
+           <h2>PARTIES GAGNEES PAR LE JOUEUR O : <span id="resultO"></span></h2><br>      
+        </div>   
+    </body>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous">
+    </script>
+    <script>
+        const limite = 9;
+        var symbol = "X";
+        var counter = 1;
+        var scoreJoueurX = 0;
+        var scoreJoueurO = 0;
+    
+        //permet le rafraichissement de la page après avoir cliqué sur le bouton REJOUER
+        function rejouer(){
+            window.location.reload();
+        }
+
+        //permet d'afficher le numéro du tour actuel
+        function returnCounter(counter) {
+            if(counter <= 9){
+                return  $("#numTour").html(counter);   
+            } else
+                return  $("#numTour").html(limite);
+        }
+
+        //permet de vérifier que le jeu est arrivé au bout du 9e tour
+        function isGameOver(counter, limite) {
+            return counter === (limite+1);
+        }
+
+        function didSomeoneWin() {
+            //-----------------------------VICTOIRE HORIZONTALE POUR X----------------------------------
+            if(($("#1-1").text()==="X" && $("#1-2").text()==="X" && $("#1-3").text()==="X") ||
+            ($("#2-1").text()==="X" && $("#2-2").text()==="X" && $("#2-3").text()==="X") || 
+            ($("#3-1").text()==="X" && $("#3-2").text()==="X" && $("#3-3").text()==="X") ||
+            //-------------------------------VICTOIRE VERTICAL POUR X-----------------------------------
+            ($("#1-1").text()==="X" && $("#2-1").text()==="X" && $("#3-1").text()==="X") ||
+            ($("#1-2").text()==="X" && $("#2-2").text()==="X" && $("#3-2").text()==="X") ||
+            ($("#1-3").text()==="X" && $("#2-3").text()==="X" && $("#3-3").text()==="X") ||
+            //-------------------------------VICTOIRE DIAGONALE POUR X----------------------------------
+            ($("#1-1").text()==="X" && $("#2-2").text()==="X" && $("#3-3").text()==="X") ||
+            ($("#3-1").text()==="X" && $("#2-2").text()==="X" && $("#1-3").text()==="X") ) 
+            { 
+                return "X";
+            }
+            //------------------------------VICTOIRE HORIZONTAL POUR O----------------------------------
+            if(($("#1-1").text()==="O" && $("#1-2").text()==="O" && $("#1-3").text()==="O") ||
+            ($("#2-1").text()==="O" && $("#2-2").text()==="O" && $("#2-3").text()==="O") || 
+            ($("#3-1").text()==="O" && $("#3-2").text()==="O" && $("#3-3").text()==="O") ||
+            //-------------------------------VICTOIRE VERTICAL POUR O-----------------------------------
+            ($("#1-1").text()==="O" && $("#2-1").text()==="O" && $("#3-1").text()==="O") ||
+            ($("#1-2").text()==="O" && $("#2-2").text()==="O" && $("#3-2").text()==="O") ||
+            ($("#1-3").text()==="O" && $("#2-3").text()==="O" && $("#3-3").text()==="O") ||
+            //-------------------------------VICTOIRE DIAGONALE POUR O----------------------------------
+            ($("#1-1").text()==="O" && $("#2-2").text()==="O" && $("#3-3").text()==="O") ||
+            ($("#3-1").text()==="O" && $("#2-2").text()==="O" && $("#1-3").text()==="O") )
+            {
+                return "O";
+            }
+        }
+    
+        $(document).ready(function(){
+            //permet de stocker et récupérer les variables de scores après rafraichissement de la page
+            var scoreJoueurX = sessionStorage.getItem("scoreX");
+            var scoreJoueurO = sessionStorage.getItem("scoreO");
+            document.getElementById("resultX").innerHTML = sessionStorage.getItem("scoreX");
+            document.getElementById("resultO").innerHTML = sessionStorage.getItem("scoreO");
+            //rend invisible le message "VICTOIRE DE :" et le bouton REJOUER
+            document.getElementById('buttonReplay').style.visibility='hidden';
+            document.getElementById('victoireDe').style.visibility='hidden';
+
+            $("a").click(function(event){
+                event.preventDefault();
+
+                if($(this).html() == false){
+                    $(this).html(symbol);  
+                    counter++;
+                    symbol = (symbol == "X") ? "O" : "X";
+                    //colore les cases de différentes couleurs
+                    if(symbol=="X"){
+                        $(this).css("background-color","lightblue");
+                    } else 
+                        $(this).css("background-color","lightcoral");
+                }
+
+                //affiche le nom du joueur devant jouer
+                $("h1 span").html(symbol);
+                //affiche le tour actuel
+                returnCounter(counter);
+                //est-ce que le match est arrivé à son terme OU est-ce que quelqu'un a gagné ?
+                if(isGameOver(counter, limite) || didSomeoneWin()){
+                    //on empêche le joueur de pouvoir continuer de cliquer après que le match soit fini
+                    $("a").off("click");
+                    $("a").removeAttr("href");
+
+                    if(didSomeoneWin()){
+                        //le compteur de tour s'arrête pour afficher à quel tour le match a été gagné
+                        $("#numTour").html(counter-1); 
+                        //affiche le nom du joueur qui a gagné
+                        document.getElementById('victoireDe').style.visibility='initial';
+                        
+                        $("#victoireDe span").html(didSomeoneWin());
+                    }
+                    $("h3 span").html("JEU TERMINE");
+                    document.getElementById('buttonReplay').style.visibility='initial';
+                    //incrémente le score du joueur qui a gagné
+                    if(didSomeoneWin()==="X"){
+                        sessionStorage.setItem("scoreX", ++scoreJoueurX);
+                    } else if (didSomeoneWin()==="O") {
+                        sessionStorage.setItem("scoreO", ++scoreJoueurO);
+                    }
+                }  
+            });         
+        }) 
+    </script>
+</html>
